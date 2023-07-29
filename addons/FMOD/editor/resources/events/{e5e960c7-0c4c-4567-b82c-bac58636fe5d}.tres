@@ -1,0 +1,9 @@
+[gd_resource type="EventAsset" format=3 uid="uid://daw0f60dfe7kb"]
+
+[resource]
+is_oneshot = true
+min_distance = 1.0
+max_distance = 20.0
+path = "event:/blankevent"
+guid = "{e5e960c7-0c4c-4567-b82c-bac58636fe5d}"
+name = "blankevent"

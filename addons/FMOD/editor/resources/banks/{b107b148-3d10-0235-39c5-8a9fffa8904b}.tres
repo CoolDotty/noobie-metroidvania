@@ -1,0 +1,8 @@
+[gd_resource type="BankAsset" format=3 uid="uid://c2f47cxeaivja"]
+
+[resource]
+file_path = "res://fmodproject/Build/Desktop/Master.strings.bank"
+modified_time = 1690664492
+path = "bank:/Master.strings"
+guid = "{b107b148-3d10-0235-39c5-8a9fffa8904b}"
+name = "Master.strings"

@@ -86,6 +86,17 @@ shape = SubResource("BoxShape3D_0lyj4")
 material_override = SubResource("StandardMaterial3D_ir25b")
 size = Vector3(4.78198, 0.0526467, 4.89515)
 
+[node name="StaticBody3D" type="StaticBody3D" parent="StaticBody3D/StaticBody3D/StaticBody3D"]
+transform = Transform3D(38.4919, 0, 0, 0, 0.870777, 0.491679, 0, -0.491679, 0.870777, -9.49169, -4.05972, -2.651)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D/StaticBody3D/StaticBody3D/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.435494, 0, -1.45932)
+shape = SubResource("BoxShape3D_0lyj4")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="StaticBody3D/StaticBody3D/StaticBody3D/StaticBody3D/CollisionShape3D"]
+material_override = SubResource("StandardMaterial3D_ir25b")
+size = Vector3(4.78198, 0.0526467, 4.89515)
+
 [node name="dragon dancer" parent="." instance=ExtResource("6_0pkqo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.49155, 0.695004, -1.19462)
 

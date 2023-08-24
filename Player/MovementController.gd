@@ -4,9 +4,9 @@ class_name MovementController
 
 @export var gravity_multiplier := 3.0
 @export var speed := 10
-@export var acceleration := 8
-@export var deceleration := 10
-@export_range(0.0, 1.0, 0.05) var air_control := 0.3
+@export var acceleration := 1
+@export var deceleration := .75
+@export_range(0.0, 1.0, 0.05) var air_control := 0.5
 @export var jump_height := 10
 var direction := Vector3()
 var input_axis := Vector2()
@@ -48,9 +48,9 @@ func accelerate(delta: float) -> void:
 	var target: Vector3 = direction * speed
 	
 	if direction.dot(temp_vel) > 0:
-		temp_accel = acceleration
+		temp_accel = acceleration * log(1 + abs(direction.dot(temp_vel)))
 	else:
-		temp_accel = deceleration
+		temp_accel = deceleration   # Applying the deceleration curve
 	
 	if not is_on_floor():
 		temp_accel *= air_control

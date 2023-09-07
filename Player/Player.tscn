@@ -1,8 +1,111 @@
-[gd_scene load_steps=4 format=3 uid="uid://bdupkh0grwy27"]
+[gd_scene load_steps=22 format=3 uid="uid://bdupkh0grwy27"]
 
 [ext_resource type="PackedScene" uid="uid://lqyku5wn2wo0" path="res://Player/MovementController.tscn" id="1_t1jcr"]
 [ext_resource type="PackedScene" uid="uid://b8drbos167vf8" path="res://Player/Head.tscn" id="2_41iu1"]
 [ext_resource type="Script" path="res://Player/Sprint.gd" id="3_bgqcu"]
+[ext_resource type="Script" path="res://addons/imjp94.yafsm/src/StateMachinePlayer.gd" id="4_suymv"]
+[ext_resource type="Script" path="res://addons/imjp94.yafsm/src/states/StateMachine.gd" id="5_3myc8"]
+[ext_resource type="Script" path="res://addons/imjp94.yafsm/src/states/State.gd" id="6_uptmw"]
+[ext_resource type="Script" path="res://addons/imjp94.yafsm/src/transitions/Transition.gd" id="7_krxt3"]
+[ext_resource type="Script" path="res://addons/imjp94.yafsm/src/conditions/Condition.gd" id="8_h5tna"]
+
+[sub_resource type="Resource" id="Resource_cwauo"]
+script = ExtResource("6_uptmw")
+name = "Walking"
+metadata/graph_offset = Vector2(1056.5, 549.5)
+
+[sub_resource type="Resource" id="Resource_d2nvp"]
+script = ExtResource("6_uptmw")
+name = "Skating"
+metadata/graph_offset = Vector2(1455.5, 549.5)
+
+[sub_resource type="Resource" id="Resource_gq8o1"]
+script = ExtResource("6_uptmw")
+name = "Entry"
+metadata/graph_offset = Vector2(1056.5, 329.5)
+
+[sub_resource type="Resource" id="Resource_ae2jw"]
+script = ExtResource("6_uptmw")
+name = "Grinding"
+metadata/graph_offset = Vector2(1449.5, 709.5)
+
+[sub_resource type="Resource" id="Resource_nmh4n"]
+script = ExtResource("7_krxt3")
+from = "Entry"
+to = "Walking"
+conditions = {}
+priority = 0
+
+[sub_resource type="Resource" id="Resource_jwty3"]
+script = ExtResource("8_h5tna")
+name = "on_board"
+
+[sub_resource type="Resource" id="Resource_5h2u5"]
+script = ExtResource("7_krxt3")
+from = "Walking"
+to = "Skating"
+conditions = {
+"on_board": SubResource("Resource_jwty3")
+}
+priority = 0
+
+[sub_resource type="Resource" id="Resource_n2km4"]
+script = ExtResource("8_h5tna")
+name = "off_board"
+
+[sub_resource type="Resource" id="Resource_rmuj5"]
+script = ExtResource("7_krxt3")
+from = "Skating"
+to = "Walking"
+conditions = {
+"off_board": SubResource("Resource_n2km4")
+}
+priority = 0
+
+[sub_resource type="Resource" id="Resource_epu8l"]
+script = ExtResource("8_h5tna")
+name = "grind"
+
+[sub_resource type="Resource" id="Resource_x2on6"]
+script = ExtResource("7_krxt3")
+from = "Skating"
+to = "Grinding"
+conditions = {
+"grind": SubResource("Resource_epu8l")
+}
+priority = 0
+
+[sub_resource type="Resource" id="Resource_obl1y"]
+script = ExtResource("7_krxt3")
+from = "Grinding"
+to = "Skating"
+conditions = {}
+priority = 0
+
+[sub_resource type="Resource" id="Resource_a6pxm"]
+script = ExtResource("5_3myc8")
+states = {
+"Entry": SubResource("Resource_gq8o1"),
+"Grinding": SubResource("Resource_ae2jw"),
+"Skating": SubResource("Resource_d2nvp"),
+"Walking": SubResource("Resource_cwauo")
+}
+transitions = {
+"Entry": {
+"Walking": SubResource("Resource_nmh4n")
+},
+"Grinding": {
+"Skating": SubResource("Resource_obl1y")
+},
+"Skating": {
+"Grinding": SubResource("Resource_x2on6"),
+"Walking": SubResource("Resource_rmuj5")
+},
+"Walking": {
+"Skating": SubResource("Resource_5h2u5")
+}
+}
+name = ""
 
 [node name="Player" instance=ExtResource("1_t1jcr")]
 
@@ -10,3 +113,9 @@
 
 [node name="Sprint" type="Node" parent="." index="2"]
 script = ExtResource("3_bgqcu")
+
+[node name="StateMachinePlayer" type="Node" parent="." index="3"]
+script = ExtResource("4_suymv")
+state_machine = SubResource("Resource_a6pxm")
+
+[connection signal="transited" from="StateMachinePlayer" to="." method="_on_state_machine_player_transited"]

@@ -17,6 +17,7 @@ var input_axis := Vector2()
 
 # Called every physics tick. 'delta' is constant
 func _physics_process(delta: float) -> void:
+	
 	input_axis = Input.get_vector(&"move_back", &"move_forward",
 			&"move_left", &"move_right")
 	
@@ -27,9 +28,12 @@ func _physics_process(delta: float) -> void:
 			velocity.y = jump_height
 	else:
 		velocity.y -= gravity * delta
-	
-	accelerate(delta)
-	
+	if input_axis.x < 0:
+		centripetal_acceleration(delta)
+	else:
+		
+		centripetal_acceleration(delta)
+		
 	move_and_slide()
 
 
@@ -59,3 +63,17 @@ func accelerate(delta: float) -> void:
 	
 	velocity.x = temp_vel.x
 	velocity.z = temp_vel.z
+
+func centripetal_acceleration(delta: float) -> void:
+	# Using only the horizontal velocity, interpolate towards the input.
+	#if left pressed 135degrees if right pressed 45 degrees
+	
+	input_axis = Input.get_vector(&"move_back", &"move_forward",
+			&"move_left", &"move_right")
+	var angle = velocity.angle_to(position + Vector3(1,0,0))	
+	var new_velocity = velocity
+	new_velocity = Vector3(1,0,0).rotated(Vector3(0,1,0), angle) * input_axis.x
+	#take the y input + or - and then use that to modify our angle ( for y input do left/right input)
+	new_velocity = new_velocity.rotated(Vector3(0,1,0), input_axis.y *deg_to_rad(25)) 
+	velocity = new_velocity
+	print()

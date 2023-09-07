@@ -42,7 +42,7 @@ func _physics_process(delta: float) -> void:
 		pass
 	
 	if current_state == "Walking":
-		accelerate(delta)
+		walking(delta)
 	if current_state == "Skating":
 		skating(delta)
 		
@@ -55,16 +55,37 @@ func direction_input() -> void:
 	direction = aim.z * -input_axis.x + aim.x * input_axis.y
 
 
-func accelerate(delta: float) -> void:
+func walking(delta: float) -> void:
 	# Using only the horizontal velocity, interpolate towards the input.
-	var temp_vel := velocity
+	var temp_vel := velocity / 1.05
 	temp_vel.y = 0
 	
 	var temp_accel: float
 	var target: Vector3 = direction * speed
 	
 	if direction.dot(temp_vel) > 0:
-		temp_accel = acceleration * log(1 + abs(direction.dot(temp_vel)))
+		temp_accel = acceleration 
+	else:
+		temp_accel = deceleration   # Applying the deceleration curve
+	
+	if not is_on_floor():
+		temp_accel *= air_control
+	
+	temp_vel = temp_vel.lerp(target, temp_accel * delta)
+	
+	velocity.x = temp_vel.x
+	velocity.z = temp_vel.z
+	
+func skating(delta: float) -> void:
+	# Using only the horizontal velocity, interpolate towards the input.
+	var temp_vel := velocity * 1.05
+	temp_vel.y = 0
+	
+	var temp_accel: float
+	var target: Vector3 = direction * speed
+	
+	if direction.dot(temp_vel) > 0:
+		temp_accel = 10 * acceleration * log(1 + abs(direction.dot(temp_vel)))
 	else:
 		temp_accel = deceleration   # Applying the deceleration curve
 	
@@ -76,42 +97,45 @@ func accelerate(delta: float) -> void:
 	velocity.x = temp_vel.x
 	velocity.z = temp_vel.z
 
-func centripetal_acceleration(delta: float) -> void:
-	# Using only the horizontal velocity, interpolate towards the input.
-	#if left pressed 135degrees if right pressed 45 degrees
-	
-	input_axis = Input.get_vector(&"move_back", &"move_forward",
-			&"move_left", &"move_right")
-	var angle = velocity.angle_to(position + Vector3(1,0,0))	
-	var new_velocity = velocity
-	new_velocity = Vector3(1,0,0).rotated(Vector3(0,1,0), angle) * input_axis.x + new_velocity
-	#take the y input + or - and then use that to modify our angle ( for y input do left/right input)
-	new_velocity = new_velocity.rotated(Vector3(0,1,0), input_axis.y *-1 *deg_to_rad(180*delta/2)) 
-	velocity = new_velocity
-	
+#func centripetal_acceleration(delta: float) -> void:
+#	# Using only the horizontal velocity, interpolate towards the input.
+#	#if left pressed 135degrees if right pressed 45 degrees
+#
+#	input_axis = Input.get_vector(&"move_back", &"move_forward",
+#			&"move_left", &"move_right")
+#	var angle = velocity.angle_to(position + Vector3(1,0,0))	
+#	var new_velocity = velocity
+#	new_velocity = Vector3(1,0,0).rotated(Vector3(0,1,0), angle) * input_axis.x + new_velocity
+#	#take the y input + or - and then use that to modify our angle ( for y input do left/right input)
+#	new_velocity = new_velocity.rotated(Vector3(0,1,0), input_axis.y *-1 *deg_to_rad(180*delta/2)) 
+#	velocity = new_velocity
+#
 
-func skating(delta: float) -> void:
-	# Using only the horizontal velocity, interpolate towards the input.
-	input_axis = Input.get_vector(&"move_back", &"move_forward",
-			&"move_left", &"move_right")
-	var angle = velocity.angle_to(position + Vector3(1,0,0))	
-	var new_velocity = velocity
-	var temp_accel: float
-	if direction.dot(new_velocity) > 0:
-		temp_accel = acceleration * log(1 + abs(direction.dot(new_velocity)))
-	else:
-		temp_accel = deceleration   # Applying the deceleration curve
-	if not is_on_floor():
-		temp_accel *= air_control
-	new_velocity = Vector3(1,0,0).rotated(Vector3(0,1,0), angle) * input_axis.x + new_velocity
-	#take the y input + or - and then use that to modify our angle ( for y input do left/right input)
-	new_velocity = new_velocity.rotated(Vector3(0,1,0), input_axis.y *-1 *deg_to_rad(180*delta/2)) 
-	
-	var target: Vector3 = direction * speed
-	new_velocity = new_velocity.lerp(target, .5)
-	
-	velocity = new_velocity
-
-
+#func WIPskating(delta: float) -> void:
+#	# Using only the horizontal velocity, interpolate towards the input.
+#	input_axis = Input.get_vector(&"move_back", &"move_forward",
+#			&"move_left", &"move_right")
+#	var angle = velocity.angle_to(position + Vector3(1,0,0))	
+#	var new_velocity = velocity
+#	var temp_vel := velocity
+#	temp_vel.y = 0
+#
+#	var temp_accel: float
+#	var target: Vector3 = direction * speed
+#	if direction.dot(new_velocity) > 0:
+#		temp_accel = acceleration * log(1 + abs(direction.dot(new_velocity)))
+#	else:
+#		temp_accel = deceleration   # Applying the deceleration curve
+#	if not is_on_floor():
+#		temp_accel *= air_control
+#	temp_vel = temp_vel.lerp(target, temp_accel * delta)
+#
+#	new_velocity = Vector3(1,0,0).rotated(Vector3(0,1,0), angle) * input_axis.x + new_velocity
+#	#take the y input + or - and then use that to modify our angle ( for y input do left/right input)
+#	new_velocity = new_velocity.rotated(Vector3(0,1,0), input_axis.y *-1 *deg_to_rad(180*delta)) 
+#	new_velocity = new_velocity.clamp(Vector3(-5,-100,-10),Vector3(5,100,10))
+#
+#	velocity.z = new_velocity.z
+#	velocity.x = temp_vel.x
 func _on_state_machine_player_transited(from, to):
 	current_state = to

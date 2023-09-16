@@ -1,23 +1,32 @@
-[gd_scene load_steps=22 format=3 uid="uid://bdupkh0grwy27"]
+[gd_scene load_steps=27 format=3 uid="uid://bdupkh0grwy27"]
 
 [ext_resource type="PackedScene" uid="uid://lqyku5wn2wo0" path="res://Player/MovementController.tscn" id="1_t1jcr"]
 [ext_resource type="PackedScene" uid="uid://b8drbos167vf8" path="res://Player/Head.tscn" id="2_41iu1"]
+[ext_resource type="EventAsset" uid="uid://boac66w53vqpw" path="res://addons/FMOD/editor/resources/events/{15096542-db16-47d2-9cfd-16cd99885e2e}.tres" id="2_j2bjl"]
 [ext_resource type="Script" path="res://Player/Sprint.gd" id="3_bgqcu"]
 [ext_resource type="Script" path="res://addons/imjp94.yafsm/src/StateMachinePlayer.gd" id="4_suymv"]
 [ext_resource type="Script" path="res://addons/imjp94.yafsm/src/states/StateMachine.gd" id="5_3myc8"]
 [ext_resource type="Script" path="res://addons/imjp94.yafsm/src/states/State.gd" id="6_uptmw"]
 [ext_resource type="Script" path="res://addons/imjp94.yafsm/src/transitions/Transition.gd" id="7_krxt3"]
 [ext_resource type="Script" path="res://addons/imjp94.yafsm/src/conditions/Condition.gd" id="8_h5tna"]
+[ext_resource type="BankAsset" uid="uid://bo1ikw3lyblu6" path="res://addons/FMOD/editor/resources/banks/{291a919c-4c6b-4e77-bf8c-00610e5b96d3}.tres" id="9_opuhx"]
+[ext_resource type="BankAsset" uid="uid://c2f47cxeaivja" path="res://addons/FMOD/editor/resources/banks/{b107b148-3d10-0235-39c5-8a9fffa8904b}.tres" id="10_bc4qj"]
 
-[sub_resource type="Resource" id="Resource_cwauo"]
-script = ExtResource("6_uptmw")
-name = "Walking"
-metadata/graph_offset = Vector2(1056.5, 549.5)
+[sub_resource type="EventAsset" id="EventAsset_gbmbc"]
+is_oneshot = true
+min_distance = 1.0
+max_distance = 20.0
+path = "event:/skb_land"
+guid = "{91294d14-c6f5-4588-965c-634eaf723e7d}"
+name = "skb_land"
 
-[sub_resource type="Resource" id="Resource_d2nvp"]
-script = ExtResource("6_uptmw")
-name = "Skating"
-metadata/graph_offset = Vector2(1455.5, 549.5)
+[sub_resource type="EventAsset" id="EventAsset_x4qep"]
+is_oneshot = true
+min_distance = 1.0
+max_distance = 20.0
+path = "event:/skb_jump"
+guid = "{5e7a16f2-8f4c-472a-9d36-b224acaeff26}"
+name = "skb_jump"
 
 [sub_resource type="Resource" id="Resource_gq8o1"]
 script = ExtResource("6_uptmw")
@@ -29,6 +38,16 @@ script = ExtResource("6_uptmw")
 name = "Grinding"
 metadata/graph_offset = Vector2(1449.5, 709.5)
 
+[sub_resource type="Resource" id="Resource_d2nvp"]
+script = ExtResource("6_uptmw")
+name = "Skating"
+metadata/graph_offset = Vector2(1455.5, 549.5)
+
+[sub_resource type="Resource" id="Resource_cwauo"]
+script = ExtResource("6_uptmw")
+name = "Walking"
+metadata/graph_offset = Vector2(1056.5, 549.5)
+
 [sub_resource type="Resource" id="Resource_nmh4n"]
 script = ExtResource("7_krxt3")
 from = "Entry"
@@ -36,16 +55,23 @@ to = "Walking"
 conditions = {}
 priority = 0
 
-[sub_resource type="Resource" id="Resource_jwty3"]
-script = ExtResource("8_h5tna")
-name = "on_board"
-
-[sub_resource type="Resource" id="Resource_5h2u5"]
+[sub_resource type="Resource" id="Resource_obl1y"]
 script = ExtResource("7_krxt3")
-from = "Walking"
+from = "Grinding"
 to = "Skating"
+conditions = {}
+priority = 0
+
+[sub_resource type="Resource" id="Resource_epu8l"]
+script = ExtResource("8_h5tna")
+name = "grind"
+
+[sub_resource type="Resource" id="Resource_x2on6"]
+script = ExtResource("7_krxt3")
+from = "Skating"
+to = "Grinding"
 conditions = {
-"on_board": SubResource("Resource_jwty3")
+"grind": SubResource("Resource_epu8l")
 }
 priority = 0
 
@@ -62,24 +88,17 @@ conditions = {
 }
 priority = 0
 
-[sub_resource type="Resource" id="Resource_epu8l"]
+[sub_resource type="Resource" id="Resource_jwty3"]
 script = ExtResource("8_h5tna")
-name = "grind"
+name = "on_board"
 
-[sub_resource type="Resource" id="Resource_x2on6"]
+[sub_resource type="Resource" id="Resource_5h2u5"]
 script = ExtResource("7_krxt3")
-from = "Skating"
-to = "Grinding"
-conditions = {
-"grind": SubResource("Resource_epu8l")
-}
-priority = 0
-
-[sub_resource type="Resource" id="Resource_obl1y"]
-script = ExtResource("7_krxt3")
-from = "Grinding"
+from = "Walking"
 to = "Skating"
-conditions = {}
+conditions = {
+"on_board": SubResource("Resource_jwty3")
+}
 priority = 0
 
 [sub_resource type="Resource" id="Resource_a6pxm"]
@@ -108,18 +127,32 @@ transitions = {
 name = ""
 
 [node name="Player" instance=ExtResource("1_t1jcr")]
+fmod_land_event = SubResource("EventAsset_gbmbc")
+fmod_jump_event = SubResource("EventAsset_x4qep")
+fmod_move_event = ExtResource("2_j2bjl")
 
-[node name="Head" parent="." index="1" instance=ExtResource("2_41iu1")]
+[node name="StudioListener3D" type="StudioListener3D" parent="." index="0" node_paths=PackedStringArray("rigidbody")]
+rigidbody = NodePath("..")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.64, 0)
 
-[node name="Sprint" type="Node" parent="." index="2"]
+[node name="Head" parent="." index="2" instance=ExtResource("2_41iu1")]
+
+[node name="Sprint" type="Node" parent="." index="3"]
 script = ExtResource("3_bgqcu")
-
-[node name="StateMachinePlayer" type="Node" parent="." index="3"]
-script = ExtResource("4_suymv")
-state_machine = SubResource("Resource_a6pxm")
 
 [node name="CSGTorus3D" type="CSGTorus3D" parent="." index="4"]
 transform = Transform3D(1.51185, 0, 0, 0, 7.73183, 0, 0, 0, 7.73183, 0, 0, 0)
 visible = false
+
+[node name="StudioBankLoader" type="StudioBankLoader" parent="." index="5"]
+load_on = 1
+unload_on = 3
+num_banks = 2
+bank_0 = ExtResource("9_opuhx")
+bank_1 = ExtResource("10_bc4qj")
+
+[node name="StateMachinePlayer" type="Node" parent="." index="6"]
+script = ExtResource("4_suymv")
+state_machine = SubResource("Resource_a6pxm")
 
 [connection signal="transited" from="StateMachinePlayer" to="." method="_on_state_machine_player_transited"]

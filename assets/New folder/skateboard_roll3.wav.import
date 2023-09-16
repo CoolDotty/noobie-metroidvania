@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dti827o7p1fn8"
+path="res://.godot/imported/skateboard_roll3.wav-e1c7c667b4939135db0f4f6ad0317edf.sample"
+
+[deps]
+
+source_file="res://assets/New folder/skateboard_roll3.wav"
+dest_files=["res://.godot/imported/skateboard_roll3.wav-e1c7c667b4939135db0f4f6ad0317edf.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{787f4155-d623-4dac-aaa0-54e40632862a}">
+		<property name="assetPath">
+			<value>skateboard_land1.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>1</value>
+		</property>
+		<property name="length">
+			<value>0.25680272108843538</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{890f770d-e44b-412a-8f59-0956cf3edfed}</destination>
+		</relationship>
+	</object>
+</objects>

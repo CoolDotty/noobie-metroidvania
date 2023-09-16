@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://cqfj60n30bnpl"
+path="res://.godot/imported/cute-ringtone vibritherabjit123.ogg-549604d15925fc307d8cdd549c045819.oggvorbisstr"
+
+[deps]
+
+source_file="res://fmodproject/Assets/cute-ringtone vibritherabjit123.ogg"
+dest_files=["res://.godot/imported/cute-ringtone vibritherabjit123.ogg-549604d15925fc307d8cdd549c045819.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

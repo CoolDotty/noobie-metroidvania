@@ -1,0 +1,9 @@
+[gd_resource type="EventAsset" format=3 uid="uid://co1pf6pewmj8p"]
+
+[resource]
+is_oneshot = true
+min_distance = 1.0
+max_distance = 20.0
+path = "event:/skb_jump"
+guid = "{5e7a16f2-8f4c-472a-9d36-b224acaeff26}"
+name = "skb_jump"

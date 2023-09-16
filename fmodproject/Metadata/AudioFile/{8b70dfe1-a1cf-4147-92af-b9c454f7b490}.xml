@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{8b70dfe1-a1cf-4147-92af-b9c454f7b490}">
+		<property name="assetPath">
+			<value>skateboard_roll1.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>1</value>
+		</property>
+		<property name="length">
+			<value>4.0648752834467121</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{890f770d-e44b-412a-8f59-0956cf3edfed}</destination>
+		</relationship>
+	</object>
+</objects>

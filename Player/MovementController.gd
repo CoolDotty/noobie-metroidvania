@@ -2,6 +2,13 @@ extends CharacterBody3D
 class_name MovementController
 
 
+@export var fmod_land_event: EventAsset
+@export var fmod_jump_event: EventAsset
+@export var fmod_move_event: EventAsset
+var move_instance: EventInstance
+var attributes: FMOD_3D_ATTRIBUTES = FMOD_3D_ATTRIBUTES.new()
+
+
 @export var gravity_multiplier := 3.0
 @export var speed := 10
 @export var acceleration := 1
@@ -16,9 +23,13 @@ var current_state = ""
 		* gravity_multiplier)
 
 
+func _ready():
+	move_instance = RuntimeManager.create_instance(fmod_move_event)
+	move_instance.start()
+
+
 # Called every physics tick. 'delta' is constant
 func _physics_process(delta: float) -> void:
-	
 	input_axis = Input.get_vector(&"move_back", &"move_forward",
 			&"move_left", &"move_right")
 	
@@ -34,17 +45,28 @@ func _physics_process(delta: float) -> void:
 		#know current state, change to the opposite, so if skate is 1 then make it 2, if walk is 2
 		if current_state == "Walking":
 			$StateMachinePlayer.set_trigger("on_board")
-			print(current_state)
 		if current_state == "Skating":
 			$StateMachinePlayer.set_trigger("off_board")
-			print(current_state)
 	else:
 		pass
+	
 	
 	if current_state == "Walking":
 		walking(delta)
 	if current_state == "Skating":
 		skating(delta)
+		if velocity.length() > 1 and is_on_floor():
+			move_instance.set_parameter_by_name("speed", clamp(velocity.length() * 2, 0.0, 20.0), false)
+		else:
+			# force mute
+			move_instance.set_parameter_by_name("speed", 0.0, false)
+		
+		if is_on_floor():
+			if Input.is_action_just_pressed(&"jump"):
+				RuntimeManager.play_one_shot_attached(fmod_jump_event, self)
+				
+		else:
+			(func(): if is_on_floor(): RuntimeManager.play_one_shot_attached(fmod_land_event, self)).call_deferred()
 		
 	move_and_slide()
 
@@ -110,7 +132,6 @@ func skating(delta: float) -> void:
 #	new_velocity = new_velocity.rotated(Vector3(0,1,0), input_axis.y *-1 *deg_to_rad(180*delta/2)) 
 #	velocity = new_velocity
 #
-
 #func WIPskating(delta: float) -> void:
 #	# Using only the horizontal velocity, interpolate towards the input.
 #	input_axis = Input.get_vector(&"move_back", &"move_forward",
@@ -137,5 +158,6 @@ func skating(delta: float) -> void:
 #
 #	velocity.z = new_velocity.z
 #	velocity.x = temp_vel.x
+
 func _on_state_machine_player_transited(from, to):
 	current_state = to

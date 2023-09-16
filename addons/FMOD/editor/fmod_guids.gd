@@ -7,7 +7,9 @@
 class_name FMODGuids
 
 class Events:
-	const BLANKEVENT = "{e5e960c7-0c4c-4567-b82c-bac58636fe5d}"
+	const SKB_JUMP = "{5e7a16f2-8f4c-472a-9d36-b224acaeff26}"
+	const SKB_LAND = "{91294d14-c6f5-4588-965c-634eaf723e7d}"
+	const SKB_MOVE = "{15096542-db16-47d2-9cfd-16cd99885e2e}"
 
 class Busses:
 	const MASTER_BUS = "{06f48557-bb7a-4f22-a9cb-9c0b44454059}"

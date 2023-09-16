@@ -118,4 +118,8 @@ script = ExtResource("3_bgqcu")
 script = ExtResource("4_suymv")
 state_machine = SubResource("Resource_a6pxm")
 
+[node name="CSGTorus3D" type="CSGTorus3D" parent="." index="4"]
+transform = Transform3D(1.51185, 0, 0, 0, 7.73183, 0, 0, 0, 7.73183, 0, 0, 0)
+visible = false
+
 [connection signal="transited" from="StateMachinePlayer" to="." method="_on_state_machine_player_transited"]

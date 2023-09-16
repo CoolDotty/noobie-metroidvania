@@ -122,3 +122,6 @@ spot_angle = 21.3803
 transform = Transform3D(9.64009, 0, 0, 0, -0.116409, 1.10086, 0, -7.54437, -0.0169862, 3.23405, 0.607398, 0.243842)
 shape = 0
 material = SubResource("FogMaterial_f1y17")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.395277, 19.9854, 66.3776)

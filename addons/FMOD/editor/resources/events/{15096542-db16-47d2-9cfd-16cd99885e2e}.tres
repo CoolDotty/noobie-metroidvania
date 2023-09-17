@@ -1,17 +1,6 @@
-[gd_resource type="EventAsset" load_steps=4 format=3 uid="uid://boac66w53vqpw"]
-
-[sub_resource type="FMOD_STUDIO_PARAMETER_ID" id="FMOD_STUDIO_PARAMETER_ID_r8oqp"]
-data1 = 1862867378
-data2 = 3101464303
-
-[sub_resource type="FMOD_STUDIO_PARAMETER_DESCRIPTION" id="FMOD_STUDIO_PARAMETER_DESCRIPTION_emdns"]
-name = "speed"
-id = SubResource("FMOD_STUDIO_PARAMETER_ID_r8oqp")
-maximum = 20.0
-guid = "{58a60c6b-9892-49e7-b3a3-739baeb8c91a}"
+[gd_resource type="EventAsset" load_steps=2 format=3 uid="uid://boac66w53vqpw"]
 
 [sub_resource type="ParameterAsset" id="ParameterAsset_v17fw"]
-parameter_description = SubResource("FMOD_STUDIO_PARAMETER_DESCRIPTION_emdns")
 path = "parameter:/speed"
 guid = "{58a60c6b-9892-49e7-b3a3-739baeb8c91a}"
 name = "speed"
